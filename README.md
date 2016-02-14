@@ -1,2 +1,2 @@
 # a
-My draft
+My draft to collect some useful code segments.
