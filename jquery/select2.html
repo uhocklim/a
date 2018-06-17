@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+</head>
+
+<body>
+  <select id="e1">
+      <option value="">--- Select ---</option>
+      <option value="EU">European Union</option>
+      <option value="EFTA">European Free Trade Association</option>
+      <option value="CARICOM">Caribbean Community</option>
+      <option value="PA">Pacific Alliance</option>
+      <option value="AU">African Union</option>
+      <option value="USAN">Union of South American Nations</option>
+      <option value="EEU">Eurasian Economic Union</option>
+      <option value="AL">Arab League</option>
+      <option value="ASEAN">Association of Southeast Asian Nations</option>
+      <option value="CAIS">Central American Integration System</option>
+      <option value="CEFTA">Central European Free Trade Agreement</option>
+      <option value="NAFTA">North American Free Trade Agreement</option>
+      <option value="SAARC">South Asian Association for Regional Cooperation</option>
+    </select>
+
+  <select id="e2" style="width: 20%">
+  </select>
+
+  <script>
+    $(document).ready(function() {
+      $("#e1").select2();
+
+      $('#e2').select2({
+        ajax: {
+          url: function(params) {
+            var region = "eu1";
+            if ($("#e1").val() != "") {
+              region = $("#e1").val();
+            }
+
+            return 'https://restcountries.eu/rest/v2/regionalbloc/' + region;
+          },
+          processResults: function(data) {
+            var data = $.map(data, function(obj) {
+              obj.id = obj.id || obj.alpha2Code; // replace pk with your identifier
+              obj.text = obj.text || obj.name; // replace name with your text
+              return obj;
+            });
+//console.log(data);
+            return {
+              results: data
+            };
+          },
+          cache: true
+        },
+        placeholder: 'Select'
+      });
+    });
+
+    $("#e1").change(function() {
+      $("#e2").val("").trigger('change');
+    });
+
+    $("#e2").change(function() {
+      console.log("e2 value: " + $("#e2").val());
+    });
+  </script>
+</body>
+
+</html>
